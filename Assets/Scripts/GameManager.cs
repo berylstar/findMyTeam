@@ -33,6 +33,9 @@ public class GameManager : MonoBehaviour
     private int count = 16;
     private int bestScore;
 
+    int totalScore = 0;
+    int plusScore = 1;
+
     private void Awake()
     {
         I = this;
@@ -110,6 +113,8 @@ public class GameManager : MonoBehaviour
             secondCard.destroyCard();
             Invoke("nameTextReset", 1.0f);
 
+            addScore(plusScore);
+
             count -= 2;
             if (count == 0)
                 Invoke("GameEnd", 1.0f);
@@ -143,5 +148,11 @@ public class GameManager : MonoBehaviour
     public void ReGame()
     {
         SceneManager.LoadScene("MainScene");
+    }
+
+    public void addScore(int score)
+    {
+        totalScore += score;
+        scoreText.text = totalScore.ToString();
     }
 }
