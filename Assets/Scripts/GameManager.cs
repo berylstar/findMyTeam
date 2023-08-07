@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
 using UnityEngine.SceneManagement;
+using System;
 
 public class GameManager : MonoBehaviour
 {
@@ -22,6 +23,11 @@ public class GameManager : MonoBehaviour
 
     public AudioClip match;
     public AudioSource audioSource;
+
+    public bool isMatched = false;
+    public float plusTime;
+    public float minusTime;
+    public float comboPoint;
 
     private float timelimit = 30f;
     private float time = 0f;
@@ -44,7 +50,7 @@ public class GameManager : MonoBehaviour
             GameObject newCard = Instantiate(card, new Vector3((i / 4) * 1.4f - 2.1f, (i % 4) * 1.4f - 3.0f, 0), Quaternion.identity, GameObject.Find("cards").transform);
 
             // 이미지 설정
-            //newCard.transform.Find("front").GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("rtan" + rtans[i].ToString());
+            newCard.transform.Find("front").GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("rtan" + rtans[i].ToString());
             newCard.GetComponent<Card>().num = rtans[i];
         }
     }
@@ -66,8 +72,13 @@ public class GameManager : MonoBehaviour
         {
             audioSource.PlayOneShot(match);
 
+            nameText.text = firstCard.transform.Find("front").GetComponent<SpriteRenderer>().sprite.name;
+            time += plusTime;
+            isMatched = true;
+
             firstCard.destroyCard();
             secondCard.destroyCard();
+            Invoke("nameTextReset", 1.0f);
 
             count -= 2;
             if (count == 0)
@@ -77,10 +88,16 @@ public class GameManager : MonoBehaviour
         {
             firstCard.closeCard();
             secondCard.closeCard();
+            time -= minusTime;
         }
 
         firstCard = null;
         secondCard = null;
+    }
+
+    private void nameTextReset()
+    {
+        nameText.text = "???";
     }
 
     private void GameEnd()
