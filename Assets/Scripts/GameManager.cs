@@ -43,7 +43,7 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1.0f;
 
         int[] rtans = { 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7 };
-        rtans = rtans.OrderBy(item => Random.Range(-1.0f, 1.0f)).ToArray();
+        rtans = rtans.OrderBy(item => UnityEngine.Random.Range(-1.0f, 1.0f)).ToArray();
 
         for (int i = 0; i < 16; i++)
         {
@@ -116,8 +116,11 @@ public class GameManager : MonoBehaviour
         }
         else
         {
+            nameText.text = "매칭 실패";
+            nameText.color = Color.red;
             firstCard.closeCard();
             secondCard.closeCard();
+            Invoke("nameTextReset", 1.0f);
             time -= minusTime;
         }
 
@@ -128,6 +131,7 @@ public class GameManager : MonoBehaviour
     private void nameTextReset()
     {
         nameText.text = "???";
+        nameText.color = Color.white;
     }
 
     private void GameEnd()
