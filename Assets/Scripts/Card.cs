@@ -13,7 +13,7 @@ public class Card : MonoBehaviour
     private Animator anim;
     private AudioSource audioScource;
 
-    private void Start()
+    private void Awake()
     {
         anim = GetComponent<Animator>();
         audioScource = GetComponent<AudioSource>();
@@ -57,5 +57,12 @@ public class Card : MonoBehaviour
 
         back.SetActive(true);
         front.SetActive(false);
+    }
+
+    public void FlipCard(bool fb)
+    {
+        anim.SetBool("isOpen", fb);
+        front.SetActive(fb);
+        back.SetActive(!fb);
     }
 }
