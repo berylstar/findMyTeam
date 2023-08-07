@@ -23,9 +23,10 @@ public class GameManager : MonoBehaviour
     public AudioClip match;
     public AudioSource audioSource;
 
-    private float timelimit = 30f;
-    private float time = 0f;
+    private float time;
+    private bool isGameStart = false;
     private int count = 16;
+    private int bestScore;
 
     private void Awake()
     {
@@ -44,20 +45,50 @@ public class GameManager : MonoBehaviour
             GameObject newCard = Instantiate(card, new Vector3((i / 4) * 1.4f - 2.1f, (i % 4) * 1.4f - 3.0f, 0), Quaternion.identity, GameObject.Find("cards").transform);
 
             // 이미지 설정
-            //newCard.transform.Find("front").GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("rtan" + rtans[i].ToString());
+            newCard.transform.Find("front").GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("rtan" + rtans[i].ToString());
             newCard.GetComponent<Card>().num = rtans[i];
         }
+
+        if (PlayerPrefs.HasKey("timeLimit"))
+            time = PlayerPrefs.GetFloat("timeLimit");
+        else
+            time = 30f;
+
+        ShowAllCards();
     }
 
     private void Update()
     {
-        time += Time.deltaTime;
-        timeText.text = time.ToString("N2");
-
-        if (time >= timelimit)
+        if (isGameStart)
         {
-            GameEnd();
+            time -= Time.deltaTime;
+            timeText.text = time.ToString("N2");
+
+            if (time <= 0)
+            {
+                GameEnd();
+            }
         }
+    }
+
+    private void ShowAllCards()
+    {
+        foreach (Transform card in GameObject.Find("cards").transform)
+        {
+            card.GetComponent<Card>().FlipCard(true);
+        }
+
+        Invoke("ShowAllCardsInvoke", 5f);       // 난이도에 따라 시간 다르게 ?
+    }
+
+    private void ShowAllCardsInvoke()
+    {
+        foreach (Transform card in GameObject.Find("cards").transform)
+        {
+            card.GetComponent<Card>().FlipCard(false);
+        }
+
+        isGameStart = true;
     }
 
     public void CheckMatch()
