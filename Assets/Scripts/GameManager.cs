@@ -44,7 +44,7 @@ public class GameManager : MonoBehaviour
     {
         Time.timeScale = 1.0f;
 
-        int[] nums = { 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7 };
+        int[] nums = { 0, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 9};
         nums = nums.OrderBy(item => Random.Range(-1.0f, 1.0f)).ToArray();
 
         for (int i = 0; i < 16; i++)
