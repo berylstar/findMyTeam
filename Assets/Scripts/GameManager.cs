@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
 using UnityEngine.SceneManagement;
+using System.Text.RegularExpressions;
+using System;
 
 public class GameManager : MonoBehaviour
 {
@@ -45,7 +47,7 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1.0f;
 
         int[] nums = { 0, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 9};
-        nums = nums.OrderBy(item => Random.Range(-1.0f, 1.0f)).ToArray();
+        nums = nums.OrderBy(item => UnityEngine.Random.Range(-1.0f, 1.0f)).ToArray();
 
         for (int i = 0; i < 16; i++)
         {
@@ -112,12 +114,30 @@ public class GameManager : MonoBehaviour
     {
         if (firstCard.num == secondCard.num && firstCard.num >= 2)
         {
+            string tempName;
             firstCard.DestroyCard();
             secondCard.DestroyCard();
 
             audioSource.PlayOneShot(match);
 
-            nameText.text = firstCard.transform.Find("front").GetComponent<SpriteRenderer>().sprite.name;
+            tempName = Regex.Replace
+                (firstCard.transform.Find("front").GetComponent<SpriteRenderer>().sprite.name, @"[^0-9]", "");
+            switch (Convert.ToInt32(tempName))
+            {
+                case 2:
+                case 3:
+                    nameText.text = "김민상";
+                    break;
+                case 4:
+                case 5:
+                    nameText.text = "김하늘";
+                    break;
+                case 6:
+                case 7:
+                    nameText.text = "김형중";
+                    break;
+            }
+
             Invoke("nameTextReset", 1.0f);
             
             time += plusTime;
