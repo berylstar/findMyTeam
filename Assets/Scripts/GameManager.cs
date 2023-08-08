@@ -186,6 +186,7 @@ public class GameManager : MonoBehaviour
         else
             resultText.text = "실패 ...";
 
+        totalScore += (int)Math.Floor(time);
         nowScoreText.text = "이번기록 : " + totalScore;
 
         if (PlayerPrefs.HasKey("bestScore"))
