@@ -23,10 +23,9 @@ public class GameManager : MonoBehaviour
     public AudioClip match;
     public AudioSource audioSource;
 
-    public bool isMatched = false;
     public float plusTime;
     public float minusTime;
-    public float comboPoint;
+    int comboCount = 0;
 
     private float time;
     private bool isGameStart = false;
@@ -112,13 +111,13 @@ public class GameManager : MonoBehaviour
 
             nameText.text = firstCard.transform.Find("front").GetComponent<SpriteRenderer>().sprite.name;
             time += plusTime;
-            isMatched = true;
+            if (comboCount < 3) comboCount++;
 
             firstCard.destroyCard();
             secondCard.destroyCard();
             Invoke("nameTextReset", 1.0f);
 
-            addScore(plusScore);
+            addScore(plusScore + comboCount - 1);
 
             count -= 2;
             if (count == 0)
@@ -128,6 +127,7 @@ public class GameManager : MonoBehaviour
         {
             nameText.text = "매칭 실패";
             nameText.color = Color.red;
+            comboCount = 0;
             firstCard.closeCard();
             secondCard.closeCard();
             Invoke("nameTextReset", 1.0f);
