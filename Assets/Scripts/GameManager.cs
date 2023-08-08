@@ -26,7 +26,7 @@ public class GameManager : MonoBehaviour
     private float time;
     private bool isGameStart = false;
     private bool isClear = false;
-    private int cardCount = 16;
+    private int cardCount = 12;
 
     public int totalScore = 0;
     public int plusScore = 1;
@@ -52,7 +52,7 @@ public class GameManager : MonoBehaviour
             GameObject newCard = Instantiate(card, new Vector3((i / 4) * 1.4f - 2.1f, (i % 4) * 1.4f - 3.0f, 0), Quaternion.identity, field);
 
             // 이미지 설정
-            newCard.transform.Find("front").GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("rtan" + nums[i].ToString());
+            newCard.transform.Find("front").GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("pic" + nums[i].ToString());
             newCard.GetComponent<Card>().num = nums[i];
         }
 
@@ -111,18 +111,19 @@ public class GameManager : MonoBehaviour
 
     public void CheckMatch()
     {
-        if (firstCard.num == secondCard.num)
+        if (firstCard.num == secondCard.num && firstCard.num <= 5)
         {
+            firstCard.DestroyCard();
+            secondCard.DestroyCard();
+
             audioSource.PlayOneShot(match);
 
             nameText.text = firstCard.transform.Find("front").GetComponent<SpriteRenderer>().sprite.name;
-            time += plusTime;
-            if (comboCount < 3) comboCount++;
-
-            firstCard.destroyCard();
-            secondCard.destroyCard();
             Invoke("nameTextReset", 1.0f);
+            
+            time += plusTime;
 
+            if (comboCount < 3) comboCount++;
             addScore(plusScore + comboCount - 1);
 
             cardCount -= 2;
@@ -134,13 +135,16 @@ public class GameManager : MonoBehaviour
         }
         else
         {
+            firstCard.CloseCard();
+            secondCard.CloseCard();
+
             nameText.text = "매칭 실패";
             nameText.color = Color.red;
-            comboCount = 0;
-            firstCard.closeCard();
-            secondCard.closeCard();
             Invoke("nameTextReset", 1.0f);
+            
             time -= minusTime;
+
+            comboCount = 0;
         }
 
         firstCard = null;
