@@ -72,7 +72,7 @@ public class GameManager : MonoBehaviour
             time -= Time.deltaTime;
             timeText.text = time.ToString("N2");
 
-            if (time <= 0)
+            if (time < 0)
             {
                 timeText.text = "0";
                 isClear = false;
@@ -112,7 +112,7 @@ public class GameManager : MonoBehaviour
 
     public void CheckMatch()
     {
-        if (firstCard.num == secondCard.num && firstCard.num >= 2)
+        if (firstCard.num == secondCard.num)
         {
             string tempName;
             firstCard.DestroyCard();
@@ -182,9 +182,14 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 0f;
 
         if (isClear)
+        {
             resultText.text = "성공 !";
+        }
         else
+        {
             resultText.text = "실패 ...";
+            time = 0f;
+        }
 
         totalScore += (int)Math.Floor(time);
         nowScoreText.text = "이번기록 : " + totalScore;
