@@ -16,23 +16,24 @@ public class GameManager : MonoBehaviour
     public Text resultText;
     public Text bestScoreText;
     public Text nowScoreText;
+    public Transform field;
     public GameObject card;
     [HideInInspector] public Card firstCard;
     [HideInInspector] public Card secondCard;
-
     public AudioClip match;
     public AudioSource audioSource;
 
-    public float plusTime;
-    public float minusTime;
-    int comboCount = 0;
-
     private float time;
     private bool isGameStart = false;
-    private int count = 16;
+    private bool isClear = false;
+    private int cardCount = 16;
 
     public int totalScore = 0;
     public int plusScore = 1;
+    private int comboCount = 0;
+
+    public float plusTime;
+    public float minusTime;
 
     private void Awake()
     {
@@ -44,11 +45,11 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1.0f;
 
         int[] nums = { 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7 };
-        nums = nums.OrderBy(item => UnityEngine.Random.Range(-1.0f, 1.0f)).ToArray();
+        nums = nums.OrderBy(item => Random.Range(-1.0f, 1.0f)).ToArray();
 
         for (int i = 0; i < 16; i++)
         {
-            GameObject newCard = Instantiate(card, new Vector3((i / 4) * 1.4f - 2.1f, (i % 4) * 1.4f - 3.0f, 0), Quaternion.identity, GameObject.Find("cards").transform);
+            GameObject newCard = Instantiate(card, new Vector3((i / 4) * 1.4f - 2.1f, (i % 4) * 1.4f - 3.0f, 0), Quaternion.identity, field);
 
             // 이미지 설정
             newCard.transform.Find("front").GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("rtan" + nums[i].ToString());
@@ -73,11 +74,16 @@ public class GameManager : MonoBehaviour
             if (time <= 0)
             {
                 timeText.text = "0";
-                GameOver();
+                isClear = false;
+                GameEnd();
             }
             else if (time <= 10)
             {
                 timeText.color = Color.red;
+            }
+            else
+            {
+                timeText.color = Color.white;
             }
         }
     }
@@ -85,7 +91,7 @@ public class GameManager : MonoBehaviour
     // 처음 시작시 카드 앞면 전체 공개
     private void ShowAllCards()
     {
-        foreach (Transform card in GameObject.Find("cards").transform)
+        foreach (Transform card in field)
         {
             card.GetComponent<Card>().FlipCard(true);
         }
@@ -95,7 +101,7 @@ public class GameManager : MonoBehaviour
 
     private void ShowAllCardsInvoke()
     {
-        foreach (Transform card in GameObject.Find("cards").transform)
+        foreach (Transform card in field)
         {
             card.GetComponent<Card>().FlipCard(false);
         }
@@ -119,9 +125,12 @@ public class GameManager : MonoBehaviour
 
             addScore(plusScore + comboCount - 1);
 
-            count -= 2;
-            if (count == 0)
-                Invoke("GameClear", 1.0f);
+            cardCount -= 2;
+            if (cardCount == 0)
+            {
+                isClear = true;
+                Invoke("GameEnd", 1.0f);
+            }
         }
         else
         {
@@ -144,18 +153,16 @@ public class GameManager : MonoBehaviour
         nameText.color = Color.white;
     }
 
-    private void GameOver()
-    {
-        endPanel.SetActive(true);
-        Time.timeScale = 0.0f;
-    }
-
-    private void GameClear()
+    private void GameEnd()
     {
         endPanel.SetActive(true);
         Time.timeScale = 0f;
 
-        resultText.text = "성공 !";
+        if (isClear)
+            resultText.text = "성공 !";
+        else
+            resultText.text = "실패 ...";
+
         nowScoreText.text = "이번기록 : " + totalScore;
 
         if (PlayerPrefs.HasKey("bestScore"))
