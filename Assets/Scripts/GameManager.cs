@@ -34,8 +34,8 @@ public class GameManager : MonoBehaviour
     public int plusScore = 1;
     private int comboCount = 0;
 
-    public float plusTime;
-    public float minusTime;
+    public float plusTime = 5f;
+    public float minusTime = 5f;
 
     private void Awake()
     {
@@ -46,7 +46,7 @@ public class GameManager : MonoBehaviour
     {
         Time.timeScale = 1.0f;
 
-        int[] nums = { 0, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 9};
+        int[] nums = { 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 7, 8, 9 };
         nums = nums.OrderBy(item => UnityEngine.Random.Range(-1.0f, 1.0f)).ToArray();
 
         for (int i = 0; i < 16; i++)
@@ -57,10 +57,7 @@ public class GameManager : MonoBehaviour
             newCard.GetComponent<Card>().num = nums[i];
         }
 
-        if (PlayerPrefs.HasKey("timeLimit"))
-            time = PlayerPrefs.GetFloat("timeLimit");
-        else
-            time = 30f;
+        time = LevelManager.s_TimeLimit;
 
         ShowAllCards();
     }
@@ -97,7 +94,7 @@ public class GameManager : MonoBehaviour
             card.GetComponent<Card>().FlipCard(true);
         }
 
-        Invoke("ShowAllCardsInvoke", 5f);       // 난이도에 따라 시간 다르게
+        Invoke("ShowAllCardsInvoke", LevelManager.s_showTime);
     }
 
     private void ShowAllCardsInvoke()
@@ -114,16 +111,19 @@ public class GameManager : MonoBehaviour
     {
         if (firstCard.num == secondCard.num)
         {
-            string tempName;
             firstCard.DestroyCard();
             secondCard.DestroyCard();
 
             audioSource.PlayOneShot(match);
 
-            tempName = Regex.Replace
+            string tempName = Regex.Replace
                 (firstCard.transform.Find("front").GetComponent<SpriteRenderer>().sprite.name, @"[^0-9]", "");
             switch (Convert.ToInt32(tempName))
             {
+                case 0:
+                case 1:
+                    nameText.text = "김형중";
+                    break;
                 case 2:
                 case 3:
                     nameText.text = "김민상";
@@ -132,18 +132,14 @@ public class GameManager : MonoBehaviour
                 case 5:
                     nameText.text = "김하늘";
                     break;
-                case 6:
-                case 7:
-                    nameText.text = "김형중";
-                    break;
             }
 
-            Invoke("nameTextReset", 1.0f);
+            Invoke("NameTextReset", 1.0f);
             
             time += plusTime;
 
             if (comboCount < 3) comboCount++;
-            addScore(plusScore + comboCount - 1);
+            AddScore(plusScore + comboCount - 1);
 
             cardCount -= 2;
             if (cardCount == 0)
@@ -159,7 +155,7 @@ public class GameManager : MonoBehaviour
 
             nameText.text = "매칭 실패";
             nameText.color = Color.red;
-            Invoke("nameTextReset", 1.0f);
+            Invoke("NameTextReset", 1.0f);
             
             time -= minusTime;
 
@@ -170,7 +166,7 @@ public class GameManager : MonoBehaviour
         secondCard = null;
     }
 
-    private void nameTextReset()
+    private void NameTextReset()
     {
         nameText.text = "???";
         nameText.color = Color.white;
@@ -214,7 +210,7 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene("LevelScene");
     }
 
-    public void addScore(int score)
+    public void AddScore(int score)
     {
         totalScore += score;
         scoreText.text = totalScore.ToString();
