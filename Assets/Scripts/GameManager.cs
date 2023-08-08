@@ -29,6 +29,7 @@ public class GameManager : MonoBehaviour
     private bool isGameStart = false;
     private bool isClear = false;
     private int cardCount = 12;
+    private float showTime = 5f;
 
     public int totalScore = 0;
     public int plusScore = 1;
@@ -57,7 +58,9 @@ public class GameManager : MonoBehaviour
             newCard.GetComponent<Card>().num = nums[i];
         }
 
-        time = LevelManager.s_TimeLimit;
+        if      (LevelManager.s_difficulty == 2) { time = 25f; showTime = 4f; plusScore = 2; }
+        else if (LevelManager.s_difficulty == 3) { time = 20f; showTime = 3f; plusScore = 3; }
+        else                                     { time = 30f; showTime = 5f; plusScore = 1; }
 
         ShowAllCards();
     }
@@ -94,7 +97,7 @@ public class GameManager : MonoBehaviour
             card.GetComponent<Card>().FlipCard(true);
         }
 
-        Invoke("ShowAllCardsInvoke", LevelManager.s_showTime);
+        Invoke("ShowAllCardsInvoke", showTime);
     }
 
     private void ShowAllCardsInvoke()
