@@ -933,17 +933,16 @@ MonoBehaviour:
   resultText: {fileID: 1886689557}
   bestScoreText: {fileID: 1369466646}
   nowScoreText: {fileID: 1945196372}
+  field: {fileID: 2092062211}
   card: {fileID: 8237632516601432054, guid: ef056b66d6665c6439a28a6aab4a7696, type: 3}
   firstCard: {fileID: 0}
   secondCard: {fileID: 0}
   match: {fileID: 8300000, guid: cf03efff20fdcb24c9a2a84af7f70945, type: 3}
   audioSource: {fileID: 928953475}
-  isMatched: 0
-  plusTime: 5
-  minusTime: 5
-  comboPoint: 5
   totalScore: 0
   plusScore: 1
+  plusTime: 5
+  minusTime: 5
 --- !u!4 &928953477
 Transform:
   m_ObjectHideFlags: 0
@@ -1466,7 +1465,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2092062211}
   m_Layer: 0
-  m_Name: cards
+  m_Name: field
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

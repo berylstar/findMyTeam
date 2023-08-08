@@ -36,22 +36,22 @@ public class Card : MonoBehaviour
         }
     }
 
-    public void destroyCard()
+    public void DestroyCard()
     {
-        Invoke("destroyCardInvoke", 1.0f);
+        Invoke("DestroyCardInvoke", 1.0f);
     }
 
-    private void destroyCardInvoke()
+    private void DestroyCardInvoke()
     {
         Destroy(this.gameObject);
     }
 
-    public void closeCard()
+    public void CloseCard()
     {
-        Invoke("closeCardInvoke", 1.0f);
+        Invoke("CloseCardInvoke", 1.0f);
     }
 
-    private void closeCardInvoke()
+    private void CloseCardInvoke()
     {
         anim.SetBool("isOpen", false);
 

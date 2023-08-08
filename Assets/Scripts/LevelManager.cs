@@ -10,8 +10,8 @@ public class LevelManager : MonoBehaviour
     public Button buttonNormal;
     public Button buttonHard;
 
-    private int openNormal;
-    private int openHard;
+    private int openNormal = 10;
+    private int openHard = 20;
 
     private void Start()
     {
