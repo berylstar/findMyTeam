@@ -51,8 +51,7 @@ public class GameManager : MonoBehaviour
         {
             GameObject newCard = Instantiate(card, new Vector3((i / 4) * 1.4f - 2.1f, (i % 4) * 1.4f - 3.0f, 0), Quaternion.identity, field);
 
-            // 이미지 설정
-            newCard.transform.Find("front").GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("pic" + nums[i].ToString());
+            newCard.transform.Find("front").GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("image" + nums[i].ToString());
             newCard.GetComponent<Card>().num = nums[i];
         }
 
@@ -111,7 +110,7 @@ public class GameManager : MonoBehaviour
 
     public void CheckMatch()
     {
-        if (firstCard.num == secondCard.num && firstCard.num <= 5)
+        if (firstCard.num == secondCard.num && firstCard.num >= 2)
         {
             firstCard.DestroyCard();
             secondCard.DestroyCard();
