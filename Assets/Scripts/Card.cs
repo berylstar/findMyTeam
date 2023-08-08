@@ -24,9 +24,6 @@ public class Card : MonoBehaviour
         anim.SetBool("isOpen", true);
         audioScource.PlayOneShot(flip);
 
-        front.SetActive(true);
-        back.SetActive(false);
-
         if (GameManager.I.firstCard == null)
             GameManager.I.firstCard = this;
         else
@@ -54,16 +51,11 @@ public class Card : MonoBehaviour
     private void CloseCardInvoke()
     {
         anim.SetBool("isOpen", false);
-
-        back.SetActive(true);
-        front.SetActive(false);
     }
 
     // true : ¾Õ¸é / false : µÞ¸é
     public void FlipCard(bool fb)
     {
         anim.SetBool("isOpen", fb);
-        front.SetActive(fb);
-        back.SetActive(!fb);
     }
 }
