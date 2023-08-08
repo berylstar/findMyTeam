@@ -59,6 +59,7 @@ public class Card : MonoBehaviour
         front.SetActive(false);
     }
 
+    // true : ¾Õ¸é / false : µÞ¸é
     public void FlipCard(bool fb)
     {
         anim.SetBool("isOpen", fb);

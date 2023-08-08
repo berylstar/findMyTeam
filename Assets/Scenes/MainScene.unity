@@ -284,7 +284,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 382137909}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 928953476}
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+        m_MethodName: ReTry
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &382137909
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -930,6 +942,8 @@ MonoBehaviour:
   plusTime: 5
   minusTime: 5
   comboPoint: 5
+  totalScore: 0
+  plusScore: 1
 --- !u!4 &928953477
 Transform:
   m_ObjectHideFlags: 0

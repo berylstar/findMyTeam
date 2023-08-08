@@ -30,10 +30,9 @@ public class GameManager : MonoBehaviour
     private float time;
     private bool isGameStart = false;
     private int count = 16;
-    private int bestScore;
 
-    int totalScore = 0;
-    int plusScore = 1;
+    public int totalScore = 0;
+    public int plusScore = 1;
 
     private void Awake()
     {
@@ -44,16 +43,16 @@ public class GameManager : MonoBehaviour
     {
         Time.timeScale = 1.0f;
 
-        int[] rtans = { 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7 };
-        rtans = rtans.OrderBy(item => UnityEngine.Random.Range(-1.0f, 1.0f)).ToArray();
+        int[] nums = { 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7 };
+        nums = nums.OrderBy(item => UnityEngine.Random.Range(-1.0f, 1.0f)).ToArray();
 
         for (int i = 0; i < 16; i++)
         {
             GameObject newCard = Instantiate(card, new Vector3((i / 4) * 1.4f - 2.1f, (i % 4) * 1.4f - 3.0f, 0), Quaternion.identity, GameObject.Find("cards").transform);
 
             // 이미지 설정
-            newCard.transform.Find("front").GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("rtan" + rtans[i].ToString());
-            newCard.GetComponent<Card>().num = rtans[i];
+            newCard.transform.Find("front").GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("rtan" + nums[i].ToString());
+            newCard.GetComponent<Card>().num = nums[i];
         }
 
         if (PlayerPrefs.HasKey("timeLimit"))
@@ -73,11 +72,17 @@ public class GameManager : MonoBehaviour
 
             if (time <= 0)
             {
-                GameEnd();
+                timeText.text = "0";
+                GameOver();
+            }
+            else if (time <= 10)
+            {
+                timeText.color = Color.red;
             }
         }
     }
 
+    // 처음 시작시 카드 앞면 전체 공개
     private void ShowAllCards()
     {
         foreach (Transform card in GameObject.Find("cards").transform)
@@ -85,7 +90,7 @@ public class GameManager : MonoBehaviour
             card.GetComponent<Card>().FlipCard(true);
         }
 
-        Invoke("ShowAllCardsInvoke", 5f);       // 난이도에 따라 시간 다르게 ?
+        Invoke("ShowAllCardsInvoke", 5f);       // 난이도에 따라 시간 다르게
     }
 
     private void ShowAllCardsInvoke()
@@ -116,7 +121,7 @@ public class GameManager : MonoBehaviour
 
             count -= 2;
             if (count == 0)
-                Invoke("GameEnd", 1.0f);
+                Invoke("GameClear", 1.0f);
         }
         else
         {
@@ -139,15 +144,38 @@ public class GameManager : MonoBehaviour
         nameText.color = Color.white;
     }
 
-    private void GameEnd()
+    private void GameOver()
     {
         endPanel.SetActive(true);
         Time.timeScale = 0.0f;
     }
 
-    public void ReGame()
+    private void GameClear()
     {
-        SceneManager.LoadScene("MainScene");
+        endPanel.SetActive(true);
+        Time.timeScale = 0f;
+
+        resultText.text = "성공 !";
+        nowScoreText.text = "이번기록 : " + totalScore;
+
+        if (PlayerPrefs.HasKey("bestScore"))
+        {
+            if (PlayerPrefs.GetInt("bestScore") < totalScore)
+            {
+                PlayerPrefs.SetInt("bestScore", totalScore);
+            }
+        }
+        else
+        {
+            PlayerPrefs.SetInt("bestScore", totalScore);
+        }
+
+        bestScoreText.text = "최고기록 : " + PlayerPrefs.GetInt("bestScore");
+    }
+
+    public void ReTry()
+    {
+        SceneManager.LoadScene("LevelScene");
     }
 
     public void addScore(int score)
