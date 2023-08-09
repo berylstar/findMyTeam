@@ -21,8 +21,7 @@ public class Card : MonoBehaviour
 
     public void OpenCard()
     {
-        anim.SetBool("isOpen", true);
-        audioScource.PlayOneShot(flip);
+        FlipCard(true);
 
         if (GameManager.I.firstCard == null)
             GameManager.I.firstCard = this;
@@ -57,5 +56,6 @@ public class Card : MonoBehaviour
     public void FlipCard(bool fb)
     {
         anim.SetBool("isOpen", fb);
+        audioScource.PlayOneShot(flip);
     }
 }

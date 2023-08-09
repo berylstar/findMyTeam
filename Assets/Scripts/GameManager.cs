@@ -22,8 +22,12 @@ public class GameManager : MonoBehaviour
     public GameObject card;
     [HideInInspector] public Card firstCard;
     [HideInInspector] public Card secondCard;
-    public AudioClip match;
-    public AudioSource audioSource;
+    
+    private AudioSource audioSource;
+    public AudioClip audioMatchSuccess;
+    public AudioClip audioMatchFail;
+    public AudioClip audioGameClear;
+    public AudioClip audioGameOver;
 
     private float time;
     private bool isGameStart = false;
@@ -41,6 +45,7 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         I = this;
+        audioSource = GetComponent<AudioSource>();
     }
 
     private void Start()
@@ -117,7 +122,7 @@ public class GameManager : MonoBehaviour
             firstCard.DestroyCard();
             secondCard.DestroyCard();
 
-            audioSource.PlayOneShot(match);
+            audioSource.PlayOneShot(audioMatchSuccess);
 
             string tempName = Regex.Replace
                 (firstCard.transform.Find("front").GetComponent<SpriteRenderer>().sprite.name, @"[^0-9]", "");
@@ -156,6 +161,8 @@ public class GameManager : MonoBehaviour
             firstCard.CloseCard();
             secondCard.CloseCard();
 
+            audioSource.PlayOneShot(audioMatchFail);
+
             nameText.text = "매칭 실패";
             nameText.color = Color.red;
             Invoke("NameTextReset", 1.0f);
@@ -183,10 +190,12 @@ public class GameManager : MonoBehaviour
         if (isClear)
         {
             resultText.text = "성공 !";
+            audioSource.PlayOneShot(audioGameClear);
         }
         else
         {
             resultText.text = "실패 ...";
+            audioSource.PlayOneShot(audioGameOver);
             time = 0f;
         }
 

@@ -593,7 +593,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.15
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -1016,8 +1016,10 @@ MonoBehaviour:
   card: {fileID: 8237632516601432054, guid: ef056b66d6665c6439a28a6aab4a7696, type: 3}
   firstCard: {fileID: 0}
   secondCard: {fileID: 0}
-  match: {fileID: 8300000, guid: cf03efff20fdcb24c9a2a84af7f70945, type: 3}
-  audioSource: {fileID: 928953475}
+  audioMatchSuccess: {fileID: 8300000, guid: cf03efff20fdcb24c9a2a84af7f70945, type: 3}
+  audioMatchFail: {fileID: 8300000, guid: 130a177e727814a2ea78a886ab72213d, type: 3}
+  audioGameClear: {fileID: 8300000, guid: 7bd6b897eb5ca4b7d88a205c4a51640c, type: 3}
+  audioGameOver: {fileID: 8300000, guid: 5fdb13d3756c84fecac96f5a2d124370, type: 3}
   totalScore: 0
   plusScore: 1
   plusTime: 5
