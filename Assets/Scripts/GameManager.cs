@@ -119,8 +119,8 @@ public class GameManager : MonoBehaviour
     {
         if (firstCard.num == secondCard.num)
         {
-            firstCard.DestroyCard();
-            secondCard.DestroyCard();
+            firstCard.Matched();
+            secondCard.Matched();
 
             audioSource.PlayOneShot(audioMatchSuccess);
 

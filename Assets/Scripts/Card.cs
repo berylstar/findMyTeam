@@ -32,8 +32,14 @@ public class Card : MonoBehaviour
         }
     }
 
-    public void DestroyCard()
+    public void Matched()
     {
+        Invoke("DestroyCard", 1.0f);
+    }
+
+    private void DestroyCard()
+    {
+        anim.SetTrigger("isDestroy");
         Invoke("DestroyCardInvoke", 1.0f);
     }
 
