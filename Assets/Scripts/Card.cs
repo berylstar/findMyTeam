@@ -34,13 +34,14 @@ public class Card : MonoBehaviour
 
     public void Matched()
     {
-        Invoke("DestroyCard", 1.0f);
+        // Alt + Enter : 개선사항 보기
+        Invoke(nameof(DestroyCard), 1.0f);          // 유지보수 위해 함수 이름 노출
     }
 
     private void DestroyCard()
     {
         anim.SetTrigger("isDestroy");
-        Invoke("DestroyCardInvoke", 1.0f);
+        Invoke(nameof(DestroyCardInvoke), 1.0f);
     }
 
     private void DestroyCardInvoke()
@@ -50,7 +51,7 @@ public class Card : MonoBehaviour
 
     public void CloseCard()
     {
-        Invoke("CloseCardInvoke", 1.0f);
+        Invoke(nameof(CloseCardInvoke), 1.0f);
     }
 
     private void CloseCardInvoke()

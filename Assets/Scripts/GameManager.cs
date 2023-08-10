@@ -52,20 +52,23 @@ public class GameManager : MonoBehaviour
     {
         Time.timeScale = 1.0f;
 
-        int[] nums = { 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 7, 8, 9 };
-        nums = nums.OrderBy(item => UnityEngine.Random.Range(-1.0f, 1.0f)).ToArray();
+        List<int> nums = new List<int>() { 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 7, 8, 9 };
 
         for (int i = 0; i < 16; i++)
         {
             GameObject newCard = Instantiate(card, new Vector3((i / 4) * 1.4f - 2.1f, (i % 4) * 1.4f - 3.0f, 0), Quaternion.identity, field);
 
-            newCard.transform.Find("front").GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("image" + nums[i].ToString());
-            newCard.GetComponent<Card>().num = nums[i];
+            int cardIndex = UnityEngine.Random.Range(0, nums.Count);
+
+            newCard.transform.Find("front").GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("image" + nums[cardIndex].ToString());
+            newCard.GetComponent<Card>().num = nums[cardIndex];
+
+            nums.RemoveAt(cardIndex);
         }
 
         if      (LevelManager.s_difficulty == 2) { time = 25f; showTime = 4f; plusScore = 2; }
         else if (LevelManager.s_difficulty == 3) { time = 20f; showTime = 3f; plusScore = 3; }
-        else                                     { time = 30f; showTime = 5f; plusScore = 1; }
+        else                                     { time = 30f; showTime = 5f; plusScore = 1; }      // else를 기본으로 한 이유는 혹시 모를 오류 방지
 
         ShowAllCards();
     }
@@ -102,7 +105,7 @@ public class GameManager : MonoBehaviour
             card.GetComponent<Card>().FlipCard(true);
         }
 
-        Invoke("ShowAllCardsInvoke", showTime);
+        Invoke(nameof(ShowAllCardsInvoke), showTime);
     }
 
     private void ShowAllCardsInvoke()
@@ -142,7 +145,7 @@ public class GameManager : MonoBehaviour
                     break;
             }
 
-            Invoke("NameTextReset", 1.0f);
+            Invoke(nameof(NameTextReset), 1.0f);
             
             time += plusTime;
 
@@ -153,7 +156,7 @@ public class GameManager : MonoBehaviour
             if (cardCount == 0)
             {
                 isClear = true;
-                Invoke("GameEnd", 1.0f);
+                Invoke(nameof(GameEnd), 1.0f);
             }
         }
         else
@@ -165,7 +168,7 @@ public class GameManager : MonoBehaviour
 
             nameText.text = "매칭 실패";
             nameText.color = Color.red;
-            Invoke("NameTextReset", 1.0f);
+            Invoke(nameof(NameTextReset), 1.0f);
             
             time -= minusTime;
 
@@ -186,33 +189,25 @@ public class GameManager : MonoBehaviour
     {
         endPanel.SetActive(true);
         Time.timeScale = 0f;
+        isGameStart = false;
 
         if (isClear)
         {
             resultText.text = "성공 !";
             audioSource.PlayOneShot(audioGameClear);
+
+            totalScore += (int)System.Math.Floor(time);
         }
         else
         {
             resultText.text = "실패 ...";
             audioSource.PlayOneShot(audioGameOver);
-            time = 0f;
         }
 
-        totalScore += (int)Math.Floor(time);
         nowScoreText.text = "이번기록 : " + totalScore;
 
-        if (PlayerPrefs.HasKey("bestScore"))
-        {
-            if (PlayerPrefs.GetInt("bestScore") < totalScore)
-            {
-                PlayerPrefs.SetInt("bestScore", totalScore);
-            }
-        }
-        else
-        {
+        if (PlayerPrefs.GetInt("bestScore", 0) < totalScore)
             PlayerPrefs.SetInt("bestScore", totalScore);
-        }
 
         bestScoreText.text = "최고기록 : " + PlayerPrefs.GetInt("bestScore");
     }
