@@ -10,14 +10,16 @@ public class LevelManager : MonoBehaviour
     public Button buttonNormal;
     public Button buttonHard;
 
-    public static float s_difficulty = 1;       // static 변수
+    public static float s_difficulty = 1;
 
     // 난이도 해금하기 위한 점수
-    private readonly int openNormal = 20;       // readonly
+    private readonly int openNormal = 20;
     private readonly int openHard = 45;
 
     private void Start()
     {
+        PlayerPrefs.SetInt("bestScore", 0);
+
         if (PlayerPrefs.HasKey("bestScore"))
         {
             int bestScore = PlayerPrefs.GetInt("bestScore");
@@ -30,7 +32,7 @@ public class LevelManager : MonoBehaviour
         }
     }
 
-    public void ButtonLevel(int level)          // 버튼에서 인풋 받기
+    public void ButtonLevel(int level)
     {
         SceneManager.LoadScene("MainScene");
         s_difficulty = level;

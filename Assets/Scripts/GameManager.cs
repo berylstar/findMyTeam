@@ -1,11 +1,7 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using System.Linq;
 using UnityEngine.SceneManagement;
-using System.Text.RegularExpressions;
-using System;
 
 public class GameManager : MonoBehaviour
 {
@@ -58,7 +54,7 @@ public class GameManager : MonoBehaviour
         {
             GameObject newCard = Instantiate(card, new Vector3((i / 4) * 1.4f - 2.1f, (i % 4) * 1.4f - 3.0f, 0), Quaternion.identity, field);
 
-            int cardIndex = UnityEngine.Random.Range(0, nums.Count);
+            int cardIndex = Random.Range(0, nums.Count);
 
             newCard.transform.Find("front").GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("image" + nums[cardIndex].ToString());
             newCard.GetComponent<Card>().num = nums[cardIndex];
@@ -127,9 +123,7 @@ public class GameManager : MonoBehaviour
 
             audioSource.PlayOneShot(audioMatchSuccess);
 
-            string tempName = Regex.Replace
-                (firstCard.transform.Find("front").GetComponent<SpriteRenderer>().sprite.name, @"[^0-9]", "");
-            switch (Convert.ToInt32(tempName))
+            switch (firstCard.num)
             {
                 case 0:
                 case 1:
@@ -149,8 +143,8 @@ public class GameManager : MonoBehaviour
             
             time += plusTime;
 
+            AddScore(plusScore + comboCount);
             if (comboCount < 3) comboCount++;
-            AddScore(plusScore + comboCount - 1);
 
             cardCount -= 2;
             if (cardCount == 0)

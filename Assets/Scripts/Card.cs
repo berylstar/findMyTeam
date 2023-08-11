@@ -34,8 +34,7 @@ public class Card : MonoBehaviour
 
     public void Matched()
     {
-        // Alt + Enter : 개선사항 보기
-        Invoke(nameof(DestroyCard), 1.0f);          // 유지보수 위해 함수 이름 노출
+        Invoke(nameof(DestroyCard), 1.0f);
     }
 
     private void DestroyCard()
